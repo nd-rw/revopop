@@ -1,7 +1,8 @@
 import re
 from gazpacho import get, Soup
+import time
 
-def get_gym_info(gym_name):
+def get_detailed_gym_info(gym_name):
     url = 'https://revofitness.com.au/'
     html = get(url)
     soup = Soup(html)
@@ -23,5 +24,25 @@ def get_gym_info(gym_name):
         return gym_status_str
     else:
         return {'gym_name': gym_name, 'num_people': num_people, 'floor_space': floor_space, 'ppl_per_metre': ppl_per_metre}
-if __name__ == '__main__':
-    get_gym_info('Victoria Park')
+
+def get_gym_event():
+    # TODO hard-coded to "Victoria Park", update to make function more generic
+
+    url = 'https://revofitness.com.au/'
+    gym_name = 'Victoria Park'
+    html = get(url)
+    soup = Soup(html)
+    clubs = soup.find('div', {'class': 'club'}, strict=True)
+    
+    for club in clubs:
+        if club.find('h4').text == gym_name:
+            specified_gym = club
+    
+    # TODO add a beter empty/null/NA check here
+    if specified_gym.find('span', {'class': 'the-number'}).text == 'N/A':
+        num_people = 0
+    else:
+        num_people = int(specified_gym.find('span', {'class': 'the-number'}).text)
+    curr_unix_time = int(time.time())
+    
+    return {'gym_name': gym_name, 'num_people': num_people, 'unix_time': curr_unix_time}

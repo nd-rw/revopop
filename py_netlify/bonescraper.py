@@ -1,4 +1,5 @@
-import sqlite3
+#import sqlite3
+# add postgres api libraries here
 
 def create_sqlite_event_query(event, table_name):
     # TODO hard-coded to revo fitness event length, re-write to be more generic

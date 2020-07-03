@@ -13,7 +13,11 @@ def get_gym_pop(gym_name):
         'Claremont': 'https://revofitness.com.au/wp-content/themes/blankslate/member_visits_api_calls/claremont_count.json'
     }
     query_url = gym_endpoints[gym_name]
-    population = int(get(query_url))
+    query_value = get(query_url)
+    if query_value == '':
+        population = 0
+    else:
+        population = int(get(query_url))
     #print(f'{gym_name}: {population}')
     return population
 
